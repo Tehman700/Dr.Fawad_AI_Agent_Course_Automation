@@ -1,23 +1,114 @@
 package com.azure;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.jar.JarFile;
 
+class GUI {
+        private JFrame frame;
+        private JTextArea textArea;
+        private JScrollPane scrollPane;
+        private JButton chooseFileButton, runMainButton;
+        private JLabel filePathLabel;
+        private String selectedFilePath = ""; // Stores the selected file path
 
+        public GUI() {
+            // Create Frame
+            frame = new JFrame("Course Automated Analyzer");
+            frame.setSize(500, 300);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensure it closes properly
+            frame.setLayout(new BorderLayout());
 
-class MainGUI{
+            // Create Text Area with Scroll Pane
+            textArea = new JTextArea();
+            textArea.setEditable(false);
+            textArea.setFont(new Font("Arial", Font.PLAIN, 14));
+            scrollPane = new JScrollPane(textArea);
+            frame.add(scrollPane, BorderLayout.CENTER);
 
-}
+            // Create Bottom Panel
+            JPanel panel = new JPanel();
+            frame.add(panel, BorderLayout.SOUTH);
 
+            // Create File Path Label
+            filePathLabel = new JLabel("No folder selected");
+            filePathLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+            frame.add(filePathLabel, BorderLayout.NORTH);
 
+            // Create FileChooser Button
+            chooseFileButton = new JButton("Select Directory");
+            chooseFileButton.setFont(new Font("Arial", Font.BOLD, 14));
+
+            // Create Run Button
+            runMainButton = new JButton("Analyze");
+            runMainButton.setFont(new Font("Arial", Font.BOLD, 14));
+            runMainButton.setBackground(new Color(100, 149, 237));
+            runMainButton.setForeground(Color.WHITE);
+            runMainButton.setEnabled(false); // Initially disabled
+
+            // Add Action Listener for FileChooser
+            chooseFileButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Allow only folder selection
+                    fileChooser.setAcceptAllFileFilterUsed(false);
+
+                    int returnValue = fileChooser.showOpenDialog(frame);
+
+                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        if (selectedFile != null) {
+                            selectedFilePath = selectedFile.getAbsolutePath();
+                            filePathLabel.setText("Selected: " + selectedFilePath);
+                            runMainButton.setEnabled(true); // Enable run button
+                        }
+                    }
+                }
+            });
+
+            // Add Action Listener for Run Button
+            runMainButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!selectedFilePath.isEmpty()) {
+                        try {
+                            Main.main(new String[]{selectedFilePath});
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Please select a directory first.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+
+            // Add Components to Panel
+            panel.add(chooseFileButton);
+            panel.add(runMainButton);
+
+            // Make Frame Visible
+            frame.setVisible(true);
+        }
+
+        public static void main(String[] args) {
+            // Start GUI
+            SwingUtilities.invokeLater(() -> new GUI());
+        }
+    }
 
 public class Main {
 
@@ -58,7 +149,8 @@ public class Main {
         return allFilesPresent;
     }
 
-    /// file creation for report///////
+    /// file creation for report/////// // THis portion is used to append to the file that is appended when response is generated
+    ///  30-01-2025 at 1:34 PM
 
 
 
@@ -80,28 +172,32 @@ public class Main {
     // Main method
     public static void main(String[] args) throws Exception {
 
-
         String qwer = "Analysis Report.md";
-        for(int i=0;i<2;i++){
-            try (FileWriter writer = new FileWriter(qwer)){
+        for (int i = 0; i < 2; i++) {
+            try (FileWriter writer = new FileWriter(qwer)) {
                 writer.write("");
-                System.out.println("Cleared all contents of: "+ qwer);
+                System.out.println("Cleared all contents of: " + qwer);
 
-            }catch(IOException e){
-                System.err.println("An error occurred while clearing the file "+ qwer);
+            } catch (IOException e) {
+                System.err.println("An error occurred while clearing the file " + qwer);
                 e.printStackTrace();
             }
 
             qwer = "Analysis Report.txt";
 
         }
-        String directoryPath = "D:\\Dr.Fawad Sample\\first\\Object Oriented Programming\\Object Oriented Programming (Theory)\\6. Exams\\Mid";
-//                                                  /// ///////////////// (File Search LLM)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//
-        Main main=new Main();
-        OpenAISetup run_bot=new OpenAISetup();
-        OpenAIFileUpload upload=new OpenAIFileUpload();
-        VectorStoreFileDeleter delete_file=new VectorStoreFileDeleter();
+
+        String directoryPath = null;
+        if (args.length > 0) {
+            directoryPath = args[0];
+        } else {
+            System.out.println("No File Path Provided");
+        }
+
+        Main main = new Main();
+        OpenAISetup run_bot = new OpenAISetup();
+        OpenAIFileUpload upload = new OpenAIFileUpload();
+        VectorStoreFileDeleter delete_file = new VectorStoreFileDeleter();
 
 
         // BELOW IS THE IMPORTANT PORTION FOR APPENDING FILE'S IN A FILE AND THEN DELETING AGAIN, HANDLING
@@ -120,7 +216,7 @@ public class Main {
             while (!lines.isEmpty()) {
                 String lineToProcess = lines.get(0);
                 System.out.println("YES THERE WAS PREVIOUS FILES IN VECTOR DATABASE!!!!");
-                delete_file.deleteVectorStoreFile(main.vectorStoreId,lineToProcess);
+                delete_file.deleteVectorStoreFile(main.vectorStoreId, lineToProcess);
 
                 // Remove the line from the list
                 lines.remove(0);
@@ -139,23 +235,20 @@ public class Main {
         }
 
 
+        com.azure.DirectoryParser directoryParser = new DirectoryParser();
 
 
-        com.azure.DirectoryParser directoryParser=new DirectoryParser();
+        ArrayList<String> filtered_Array = directoryParser.process_filteration(directoryPath);
 
 
-        ArrayList<String> filtered_Array= directoryParser.process_filteration(directoryPath);
+        System.out.println("files\n" + filtered_Array);
 
 
-
-        System.out.println("files\n"+filtered_Array);
-
-
-         String file_1 = "";
-         String file_2="";
+        String file_1 = "";
+        String file_2 = "";
 
 
-        for(String S: filtered_Array) {
+        for (String S : filtered_Array) {
 
 
 //            String test_file_path="C:\\Users\\Syed Ali\\Downloads\\Sir_Fawad_agent\\test.txt";
@@ -167,34 +260,23 @@ public class Main {
             String[] Pair_file_array = pair_files.split(",");
 
 
-             file_1 = directoryParser.getFilesInFolder(directoryPath,Pair_file_array[0].trim());
+            file_1 = directoryParser.getFilesInFolder(directoryPath, Pair_file_array[0].trim());
 
 
-            file_2 = directoryParser.getFilesInFolder(directoryPath,Pair_file_array[1].trim());
+            file_2 = directoryParser.getFilesInFolder(directoryPath, Pair_file_array[1].trim());
 
 
+            System.out.println("\nFile_one_path: " + file_1);
+            System.out.println("\nfile_two_path" + file_2);
 
 
-
-            System.out.println("\nFile_one_path: "+ file_1);
-            System.out.println("\nfile_two_path"+ file_2);
-
-
-
-
-
-
-            String fileId_1= upload.associate_with_assistant(new File(file_1));
-            String fileId_2= upload.associate_with_assistant(new File(file_2));
-
-
-
+            String fileId_1 = upload.associate_with_assistant(new File(file_1));
+            String fileId_2 = upload.associate_with_assistant(new File(file_2));
 
 
             run_bot.process_bot();
-            String response="# "+Pair_file_array[0].trim()+"\n\n"+run_bot.contentValue+"\n\n# ---------------------------------------------------------------------\n";
-            run_bot.contentValue="";
-
+            String response = "# " + Pair_file_array[0].trim() + "\n\n" + run_bot.contentValue + "\n\n# ---------------------------------------------------------------------\n";
+            run_bot.contentValue = "";
 
 
             delete_file.deleteVectorStoreFile(main.vectorStoreId, fileId_1);
@@ -204,11 +286,10 @@ public class Main {
             Thread.sleep(10000);
 
 
-
             // Append content to the specified file
             String markdownFilePath = "Analysis Report.md"; // Markdown file
             String textFilePath = "Analysis Report.txt"; // Text file
-            String newContent = response+"\n\n\n";
+            String newContent = response + "\n\n\n";
 
             // Append the content to the Markdown file and Text file
             appendToFile(markdownFilePath, newContent, "Markdown");
@@ -218,17 +299,15 @@ public class Main {
             /// We also have to empty the text file which contains ID's   changes made on 28-01-2025      6:01 AM by Tehman
 
 
-            try{
+            try {
                 FileWriter obj = new FileWriter(FILE_PATHSS);
                 obj.write("");
                 obj.close();
 
                 System.out.println("******************  Everything is Cleared in teh ID's File!!! *****************");
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("An Error Occurred while Clearing the ID's File, Well System won't Stop!!!" + e.getMessage());
             }
-
-
 
 
             // In this portion we will transform the MD file to PDF File and then delete all the content of MD File, Implemented by Tehman on 29-01-2025 2:26AM
@@ -236,10 +315,6 @@ public class Main {
 
             MarkdownToPdfConverter objss = new MarkdownToPdfConverter();
             objss.changerss();
-
-
-
-
 
 
         }
