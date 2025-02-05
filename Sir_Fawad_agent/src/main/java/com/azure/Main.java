@@ -21,14 +21,16 @@ class GUI {
     private JFrame frame;
     private JTextArea textArea;
     private JScrollPane scrollPane;
-    private JButton chooseFileButton, runMainButton, exitButton;
-    private JLabel filePathLabel;
+    private JButton chooseFileButton, chooseSaveLocationButton, runMainButton, exitButton;
+    private JLabel filePathLabel, savePathLabel;
     private String selectedFilePath = ""; // Stores the selected file path
+    private String selectedSavePath = ""; // Stores the selected save path for PDF
+
 
     public GUI() {
         // Create Frame
         frame = new JFrame("Course Automated Analyzer");
-        frame.setSize(600, 400);
+        frame.setSize(900, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensure it closes properly
         frame.setLayout(new BorderLayout());
 
@@ -45,12 +47,18 @@ class GUI {
 
         // Create File Path Label
         filePathLabel = new JLabel("No folder selected");
-        filePathLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        filePathLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         frame.add(filePathLabel, BorderLayout.NORTH);
+        savePathLabel = new JLabel("No save location selected");
+        savePathLabel.setFont(new Font("Arial", Font.PLAIN,     20));
+        frame.add(savePathLabel, BorderLayout.CENTER);
 
         // Create FileChooser Button
         chooseFileButton = new JButton("Select Directory");
         chooseFileButton.setFont(new Font("Arial", Font.BOLD, 14));
+        // Create Save Location Button
+        chooseSaveLocationButton = new JButton("Select Save Location");
+        chooseSaveLocationButton.setFont(new Font("Arial", Font.BOLD, 14));
 
         // Create Run Button
         runMainButton = new JButton("Analyze");
@@ -84,19 +92,37 @@ class GUI {
                 }
             }
         });
+        chooseSaveLocationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Allow only folder selection
+                fileChooser.setAcceptAllFileFilterUsed(false);
+
+                int returnValue = fileChooser.showOpenDialog(frame);
+
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    if (selectedFile != null) {
+                        selectedSavePath = selectedFile.getAbsolutePath();
+                        savePathLabel.setText("Save Location: " + selectedSavePath);
+                    }
+                }
+            }
+        });
 
         // Add Action Listener for Run Button
         runMainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!selectedFilePath.isEmpty()) {
+                if (!selectedFilePath.isEmpty() && !selectedSavePath.isEmpty()) {
                     try {
-                        Main.main(new String[]{selectedFilePath});
+                        Main.main(new String[]{selectedFilePath, selectedSavePath});
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Please select a directory first.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Please select a directory and a save location first.", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -109,6 +135,7 @@ class GUI {
         });
         // Add Components to Panel
         panel.add(chooseFileButton);
+        panel.add(chooseSaveLocationButton);
         panel.add(runMainButton);
         panel.add(exitButton);
 
