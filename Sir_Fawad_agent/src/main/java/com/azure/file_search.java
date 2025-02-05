@@ -224,9 +224,6 @@ class OpenAISetup {
                                             // Check if "value" exists and is not null
                                             if (textObject.has("value") && textObject.get("value") != null) {
                                                 String content = textObject.get("value").getAsString();
-//                                                contentValue=textObject.get("value").getAsString();
-
-
                                                 contentValue+=content;
 
                                             } else {
