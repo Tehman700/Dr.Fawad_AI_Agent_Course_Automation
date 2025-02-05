@@ -231,13 +231,19 @@ public class Main {
 
         }
 
+
         String directoryPath = null;
+        String savePath = null; // Add a variable to store the save path
         if (args.length > 0) {
             directoryPath = args[0];
+            if (args.length > 1) {
+                savePath = args[1]; // Get the save path from the arguments
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please Provide Path for Files. It must be a Folder!!!", "Incomplete Path", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("No File Path Provided");
         }
+
 
         Main main = new Main();
         OpenAISetup run_bot = new OpenAISetup();
@@ -343,7 +349,7 @@ public class Main {
             // In this portion we will transform the MD file to PDF File and then delete all the content of MD File, Implemented by Tehman on 29-01-2025 2:26AM
 
             MarkdownToPdfConverter objss = new MarkdownToPdfConverter();
-            objss.changerss();
+            objss.changerss(savePath);
 
         }
 
