@@ -21,14 +21,14 @@ class GUI {
     private JFrame frame;
     private JTextArea textArea;
     private JScrollPane scrollPane;
-    private JButton chooseFileButton, runMainButton;
+    private JButton chooseFileButton, runMainButton, exitButton;
     private JLabel filePathLabel;
     private String selectedFilePath = ""; // Stores the selected file path
 
     public GUI() {
         // Create Frame
         frame = new JFrame("Course Automated Analyzer");
-        frame.setSize(500, 300);
+        frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensure it closes properly
         frame.setLayout(new BorderLayout());
 
@@ -59,6 +59,11 @@ class GUI {
         runMainButton.setForeground(Color.WHITE);
         runMainButton.setEnabled(false); // Initially disabled
 
+        // Create Exit Button
+        exitButton = new JButton("Click for Stopping after Text File Uploaded Prompt");
+        exitButton.setFont(new Font("Arial", Font.BOLD, 12));
+        exitButton.setBackground(new Color(220, 20, 60)); // Red color
+        exitButton.setForeground(Color.WHITE);
         // Add Action Listener for FileChooser
         chooseFileButton.addActionListener(new ActionListener() {
             @Override
@@ -95,10 +100,17 @@ class GUI {
                 }
             }
         });
-
+        // Add Action Listener for Exit Button
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Terminate the program
+            }
+        });
         // Add Components to Panel
         panel.add(chooseFileButton);
         panel.add(runMainButton);
+        panel.add(exitButton);
 
         // Make Frame Visible
         frame.setVisible(true);

@@ -1,152 +1,69 @@
-# Quiz 1.docx
+# Mid Exam.pdf
 
-Let's break down the analysis of the question and its solution from Quiz 1 related to Object-Oriented Programming (OOP).
+To evaluate the mid-exam questions and solutions regarding their alignment with Bloom's Taxonomy levels and provide necessary feedback, let's analyze each question and its corresponding solution systematically.
 
-### Question Analysis
-**Question**: Infer a Java program using OOP concepts for the following scenario, we have concrete classes for real animals like Cow, Lion, Parrot, and Elephant. Each class implements the Animal interface, providing implementations for the eat(), sleep(), and makeSound() methods. These methods define the common behaviours of all animals. The Mammal and Bird abstract classes provide common properties and behaviours for mammals and birds, respectively. The main class Zoo demonstrates the usage of these classes by creating instances of different animals and invoking their behaviours. 
-- **CLO**: CLO-1
-- **Bloom's Taxonomy Level**: C2 (Understanding)
+### Question Evaluation
 
-**Identifying the Taxonomy Level**:
-- The task requires the application of OOP concepts and understanding class hierarchies. It fits within the **Understanding (Level 2)** category of Bloom's Taxonomy since it necessitates comprehension of class relationships and the ability to infer a working code from specifications.
+#### Question 1:
+1. **Question**: Create a Java class representing a Circle with a private radius attribute. Include public methods to set the radius and calculate the area of the circle. [CLO-1]
+   - **Identified Taxonomy Level**: Remembering and Understanding
+   - **Improvement Suggestions**: This question is low-level as it involves simple coding without deeper understanding or application. To elevate it:
+     - Reword it to include a requirement for error handling (e.g., handle negative radius).
+     - Example Questions:
+       1. Create a Java class representing a Circle with a private radius attribute. Include methods to set the radius validating that it is non-negative, calculate the area of the circle, and return a string representation of the circle.
+       2. In addition to the Circle class, create a method that compares the area of two Circle objects and determines which one is larger.
 
-**Analysis**:
-- **Matched Level**: Yes, the question aligns with the specified level of C2.
+#### Question 2:
+2. **Question**: Define a Java class Animal with a method makeSound(). Create a subclass Dog that overrides the makeSound() method to print "Dog barks". [CLO-1]
+   - **Identified Taxonomy Level**: Understanding and Applying
+   - **Comments**: This question is appropriate, but could further engage students by asking them to implement an additional subclass, allowing deeper exploration of polymorphism.
 
----
+#### Question 3:
+3. **Question**: Create an interface Shape with a method calculateArea(). Implement this interface in classes Circle and Rectangle. Test polymorphism by calling calculateArea() on instances of both classes. [CLO-1]
+   - **Identified Taxonomy Level**: Applying
+   - **Comments**: This question aligns with the required Bloom's level; no significant changes needed. However, additional context for practical applications of polymorphism could enhance complexity.
 
-### Solution Analysis
-**Solution**:
-1. **Interface and Abstract Classes**:
-   - **Animal Interface**: Declares common behaviors.
-   - **Mammal and Bird Abstract Classes**: Provide properties/behaviors.
+#### Question 4:
+4. **Question**: What is encapsulation and why is it important in OOP? How does encapsulation promote data hiding? Give an example of encapsulation in Java with a class containing private variables and public methods. [CLO-1]
+   - **Identified Taxonomy Level**: Understanding and Analyzing
+   - **Comments**: This question meets the intended level. Encouraging students to review existing classes to identify encapsulation could enhance its application aspect.
 
-2. **Concrete Classes**:
-   - **Implementations**: Cow, Lion, Elephant use Mammal; Parrot uses Bird.
+#### Question 5:
+5. **Question**: What is polymorphism and how does it contribute to code reusability? Explain the difference between compile-time polymorphism and runtime polymorphism. Give an example of polymorphism in Java using method overriding. [CLO-1]
+   - **Identified Taxonomy Level**: Analyzing and Evaluating
+   - **Comments**: This question appropriately challenges students and provides a solid basis for deeper analysis into polymorphism nuances.
 
-3. **Main Class**:
-   - The **Zoo** class demonstrates the usage by creating instances of these classes.
+### Solution Evaluation
 
-**Code Implementation**: 
-The solution provides a complete Java code that satisfies the requirements of the question, showcasing the use of inheritance, interfaces, and polymorphism.
+**General Note on Solutions**: The solutions provided generally reflect an understanding of core OOP concepts and give examples that demonstrate the requested knowledge. Here is a breakdown of individual solutions and their evaluations:
 
-### Rating & Feedback
-- **Rating**: 10/10
-- **Key Elements**: 
-  - Correct implementation of interfaces and abstract classes.
-  - Demonstrates instance creation and method invocation as per OOP principles.
-  
-**Conclusion**:
-- The solution effectively meets the expected level of understanding (C2) within Bloom's Taxonomy. There are no suggestions for improvements as it accurately reflects the requirements of the question.
+1. **Solution for Circle class**:
+   - **Rating**: 7/10
+   - **Key Elements**: Correctly defines the Circle class and includes necessary methods.
+   - **Suggestions for Improvement**: Add validation for radius.
 
-Overall, both the question and its corresponding solution align well with the specified Bloom's Taxonomy level, presenting a coherent learning objective and appropriately challenging task for students.
+2. **Solution for Animal and Dog classes**:
+   - **Rating**: 8/10
+   - **Key Elements**: Polymorphism demonstrated in implementation via subclassing.
+   - **Suggestions for Improvement**: Include a method to make sound of other Animal subclasses to further illustrate polymorphism.
 
-# ---------------------------------------------------------------------
+3. **Implementation of Shape interface**:
+   - **Rating**: 9/10
+   - **Key Elements**: Correctly implements polymorphism through the Shape interface.
+   - **Suggestions for Improvement**: Add error handling in implementation to enhance robustness.
 
+4. **Explanation of Encapsulation**:
+   - **Rating**: 8/10
+   - **Key Elements**: Clearly defines encapsulation and provides a valid example class.
+   - **Suggestions for Improvement**: Include a scenario where encapsulation effectively safeguards data.
 
+5. **Polymorphism Explanation**:
+   - **Rating**: 9/10
+   - **Key Elements**: Thorough explanation of polymorphism and its effects on reusability.
+   - **Suggestions for Improvement**: Provide a more detailed comparison between compile-time and runtime with practical examples.
 
-
-# Quiz 2.docx
-
-### Question Analysis
-
-1. **Question 1: Concatenating Strings**  
-   **Given CLO & Level:** CLO-2, C3  
-   **Taxonomy Level Determination:** C3 indicates "Applying". The task requires students to apply string manipulation skills to concatenate two strings.  
-   **Analysis Outcome:** The question aligns with the specified Bloom's level.
-
-2. **Question 2: Searching Substrings**  
-   **Given CLO & Level:** CLO-2, C3  
-   **Taxonomy Level Determination:** The task asks students to check for the presence of a substring within another string, which is a practical application of string functions.  
-   **Analysis Outcome:** The question aligns with the specified Bloom's level.
-
-3. **Question 3: Splitting Strings**  
-   **Given CLO & Level:** CLO-2, C4  
-   **Taxonomy Level Determination:** C4 indicates "Analyzing". The task involves splitting a sentence, which requires a higher level of understanding and manipulation of strings.  
-   **Analysis Outcome:** The question is at C3 (Applying) but is specified for C4 (Analyzing).  
-   **Suggestions for Improvement:**  
-   - **Modify the question to require students to analyze the words split from the sentence, perhaps by counting words or identifying unique occurrences.**  
-   - **Example Questions:**  
-     - "Write a program that prompts the user to enter a sentence and then splits the sentence into words, counts the number of words, and prints the results."  
-     - "Develop a program that splits a sentence into words and analyzes the frequency of each word, printing each unique word followed by its count."
-
-
-### Solution Analysis
-
-1. **Solution for Question 1**  
-   **Rating:** 10/10  
-   **Key Elements:** Correctly handles input and concatenates strings as required.  
-   **Improvement:** None needed.
-
-2. **Solution for Question 2**  
-   **Rating:** 10/10  
-   **Key Elements:** Correctly implements a method to check for substring presence and responds appropriately based on the result.  
-   **Improvement:** None needed.
-
-3. **Solution for Question 3**  
-   **Rating:** 7/10  
-   **Key Elements:** Correctly splits the sentence into words and prints them line by line.  
-   **Suggestions for Improvement:** To meet the C4 level, the solution should include additional logic to analyze the number of words and/or their frequency.  
-   **How to Enhance:**  
-   - Include a mechanism to count the number of words and use a data structure like a HashMap to count occurrences of each word.
-   - Update the solution code to reflect this added analysis.
-
-### Summary
-
-The first two questions align well with the specified Bloom's taxonomy levels, and their solutions are adequately executed. The third question requires revision to elevate it from a C3 to a C4 level, alongside enhancements in its corresponding solution to reflect a more analytical approach.
-
-# ---------------------------------------------------------------------
-
-
-
-
-# Quiz 3.docx
-
-### Question Analysis
-
-**Question:**
-Create a java program to input a paragraph from the user and count the words “The” and “is” ignoring the case and write the count in a file.  
-- **CLO:** CLO-3  
-- **Bloom's Level:** C5 (Evaluate/Analyze)
-
-**Taxonomy Level Identification:**
-The command in the question requires the application and analysis of knowledge through the creation of a program which is consistent with the "C5" level of Bloom’s Taxonomy. 
-
-**Comparison:**
-The question meets the specified level as creating a program requires evaluation and analysis capabilities.
-
-**Conclusion:** 
-This question is aligned with the desired taxonomy level.
-
-### Solution Analysis
-
-**Solution:**
-The provided Java code captures the user’s input, counts the occurrences of specified words ignoring cases, and writes the results to a file. 
-
-1. **Rating:** 9/10  
-   - The solution effectively captures the intent of the question and demonstrates a functional approach to word counting and file I/O.
-  
-2. **Key Elements:**
-   - Utilizes a `WordCounter` class to encapsulate word counting logic.
-   - Efficiently handles text by converting it to lowercase.
-   - Demonstrates file writing using `BufferedWriter`.
-   - Provides console output for user interaction.
-
-3. **Suggestions for Improvement:**
-   - **Enhancement in User Interaction:** Add error handling for the case when the user enters an empty paragraph.
-   - **Example Improvement:** Modify the program to allow users to specify multiple words to count. This makes the solution more versatile and educational.
-   
-   **Improved Example:**
-   ```java
-   System.out.println("Enter words to count separated by commas:");
-   String[] wordsToCount = scanner.nextLine().split(",");
-   for (String word : wordsToCount) {
-       int count = wordCounter.countWord(paragraph, word.trim());
-       System.out.println("Count of '" + word.trim() + "': " + count);
-   }
-   ```
-
-Overall, both the question and its solution align well with the specified Bloom's Taxonomy level, exhibiting clear educational value.
+### Conclusion
+Overall, the exam is well-structured with clarity in questions. Small enhancements could push the evaluations and expectations further up Bloom's Taxonomy, particularly focusing on application and analysis tasks. Constructive suggestions were provided for both questions and answers to refine the assessments.
 
 # ---------------------------------------------------------------------
 

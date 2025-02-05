@@ -9,6 +9,8 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import javax.swing.*;
 import java.io.*;
+import java.awt.*;
+
 
 
 // Created on 28-01-2025 at 6:10 AM by Tehman
@@ -27,6 +29,12 @@ public class MarkdownToPdfConverter {
 
             createPDFfromHTML(html_converter,pdfOutput);
             obb.showAutoCloseDialog("PDF FILE CREATED SUCCESSFULLY!!!" + pdfOutput,"Final Step Completed",JOptionPane.INFORMATION_MESSAGE);
+            File pdfFile = new File(pdfOutput);
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().open(pdfFile);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: PDF file not found!", "File Not Found", JOptionPane.ERROR_MESSAGE);
+            }
 
 
         }catch(IOException | DocumentException e){
