@@ -11,9 +11,23 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.io.*;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.List;
 
 
 class OpenAIFileUpload {
+    AutoShowingDialog objjj = new AutoShowingDialog();
 
     private static final String FILE_PATH = "file_ids.txt";
     static Dotenv dotenv = Dotenv.load();
@@ -47,9 +61,10 @@ class OpenAIFileUpload {
                 String responseBody = response.body().string();
                 JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
                  fileId = jsonResponse.get("id").getAsString();
-                System.out.println("File uploaded successfully with ID: " + fileId);
+                objjj.showAutoCloseDialog("Important Task!! File Uploaded Successfully with ID: " +fileId, "File Uploaded Message", JOptionPane.INFORMATION_MESSAGE);
                 return fileId;
             } else {
+                objjj.showAutoCloseDialog("Failed to upload file: " + response.body().string(), "File Uploaded Failed", JOptionPane.INFORMATION_MESSAGE);
                 throw new IOException("Failed to upload file: " + response.body().string());
             }
         }
@@ -69,8 +84,6 @@ class OpenAIFileUpload {
          fileId =oop.uploadFile(file) ;      // Replace with the file ID to attach
 
         if(fileId ==""){
-
-
 
             return "File does not uploaded";
 
@@ -120,10 +133,12 @@ class OpenAIFileUpload {
                     while ((line = bufferedReader.readLine()) != null) {
                         response.append(line);
                     }
+                    objjj.showAutoCloseDialog("Response: " + response.toString(), "File Response Generated", JOptionPane.INFORMATION_MESSAGE);
 
                     System.out.println("Response: " + response.toString());
                 }
             } else {
+                objjj.showAutoCloseDialog("Error: !!!!" + connection.getResponseMessage(), "File Response Error", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("Error: " + connection.getResponseMessage());
             }
         } catch (Exception e) {

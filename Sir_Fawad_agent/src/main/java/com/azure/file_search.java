@@ -1,13 +1,13 @@
 package com.azure;
-
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.*;
-
-
-import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -15,10 +15,22 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedWriter;
 import java.util.concurrent.CompletableFuture;
-import io.github.cdimascio.dotenv.Dotenv;
 
 
 class OpenAISetup {
+    private static void showAutoCloseDialog(String message, String title, int messageType) {
+        JOptionPane optionPane = new JOptionPane(message, messageType);
+        JDialog dialog = optionPane.createDialog(title);
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+        dialog.setVisible(true);
+    }
 
 
     static Dotenv dotenv = Dotenv.load();
@@ -59,16 +71,6 @@ class OpenAISetup {
 
 
 
-
-
-
-
-
-
-
-
-
-
     public String createThread() {
         JsonObject threadRequestBody = new JsonObject();
         Request request = new Request.Builder()
@@ -81,10 +83,13 @@ class OpenAISetup {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 JsonObject responseObject = JsonParser.parseString(response.body().string()).getAsJsonObject();
+                showAutoCloseDialog("This is an Important Part, Thread Created!!!","Thread Created Successfully", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("thread Created...: " );
 
                 return responseObject.get("id").getAsString();
             } else {
+                showAutoCloseDialog("Failed to create thread: " + response.code() + " " + response.message(),"Thread Failed Creation", JOptionPane.INFORMATION_MESSAGE);
+
                 System.out.println("Failed to create thread: " + response.code() + " " + response.message());
             }
         } catch (IOException e) {
@@ -244,13 +249,18 @@ class OpenAISetup {
         boolean message_added=false;
       threadId=createThread();
         if(threadId!=null){
+            showAutoCloseDialog("This is an Important Portion!! Thread Created Successfully, Usually Takes Time","Thread Created Successfully", JOptionPane.INFORMATION_MESSAGE);
+
             System.out.println("thread created");
           message_added=addMessage(threadId,"user",query);
       }
       else{
-          System.out.println("thread does not exist or not created");
+            showAutoCloseDialog("Thread does not exist or not created","Thread Failed Creation", JOptionPane.INFORMATION_MESSAGE);
+
+            System.out.println("thread does not exist or not created");
      }
       if(message_added){
+          showAutoCloseDialog("The Message is Added to Thread Successfully","Message Creation", JOptionPane.INFORMATION_MESSAGE);
 
           System.out.println("Message Added to thread successfully");
           streamAssistantResponse(threadId,instructions);

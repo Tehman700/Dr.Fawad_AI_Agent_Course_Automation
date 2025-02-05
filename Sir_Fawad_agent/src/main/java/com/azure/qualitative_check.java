@@ -3,6 +3,9 @@ package com.azure;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -29,7 +32,19 @@ class DirectoryNode {
 
 
 class DirectoryParser {
-
+    private static void showAutoCloseDialog(String message, String title, int messageType) {
+        JOptionPane optionPane = new JOptionPane(message, messageType);
+        JDialog dialog = optionPane.createDialog(title);
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+        dialog.setVisible(true);
+    }
     public static DirectoryNode parseDirectory(File dir) {
         DirectoryNode node = new DirectoryNode(dir.getName());
         File[] contents = dir.listFiles();
@@ -70,7 +85,7 @@ class DirectoryParser {
         if (contents != null) {
             for (File file : contents) {
                 if (file.isFile()) {
-                    System.out.println("File: " + file.getAbsolutePath());
+                    showAutoCloseDialog("File: " + file.getAbsolutePath(), "File Absolute Path", JOptionPane.INFORMATION_MESSAGE);
                 } else if (file.isDirectory()) {
                     displayFileFullPath(file);
                 }
@@ -121,7 +136,7 @@ class DirectoryParser {
         """, folderNames);
 
 
-        // Write the payload to the connectioN
+        // Write the payload to the connection
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = payload.getBytes("utf-8");
             os.write(input, 0, input.length);
@@ -176,7 +191,6 @@ class DirectoryParser {
                 The first file must be the question file, and the second must be the solution file. 
                 Return only these two file names, with no additional text, punctuation, or symbols.
                 donot include file with keywords  "best,worse,average,sample".
-
                 """, filenames);
 
 
@@ -223,7 +237,7 @@ class DirectoryParser {
      public static String getFilesInFolder(String rootDirectory, String targetName) {
         File rootDir = new File(rootDirectory);
         if (!rootDir.exists() || !rootDir.isDirectory()) {
-            System.out.println("Invalid root directory.");
+            showAutoCloseDialog("Invalid root directory.", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
@@ -332,14 +346,13 @@ class DirectoryParser {
 
             System.out.println("\n");
 
-
+            showAutoCloseDialog("Folders with files only: " + folder_WITH_FILES, "Folders with Files", JOptionPane.INFORMATION_MESSAGE);
             String Valid_folders = sendChatCompletionRequest(folder_WITH_FILES);
 
 
             String[] words = Valid_folders.split(",");
 
-            System.out.println("\n" +"Required Folders in this directory : "+ Valid_folders);
-
+            showAutoCloseDialog("Required Folders in this directory: " + Valid_folders, "Required Folders", JOptionPane.INFORMATION_MESSAGE);
 
             //System.out.println(test);
 
@@ -357,11 +370,7 @@ class DirectoryParser {
             String filtered_files;
             for (String S : words) {
 
-                // S is the folder that we are requiring by filtering like mids or finals
-                System.out.println("\n" + S);
-
-
-
+                showAutoCloseDialog("Processing folder: " + S, "Processing Folder", JOptionPane.INFORMATION_MESSAGE);
 
 
                 String rootDirectory = rootPath;
@@ -369,8 +378,7 @@ class DirectoryParser {
                 // THIS IS THE STRING THAT HAS ALL THE FILES IN THE FOLDER WHICH IS GENUINE TO CHECK
                 String csvResult = getFilesInFolder(rootDirectory, targetFolder);
                 if (csvResult != null) {
-                    System.out.println("Displaying all files in this Folder : " + csvResult);
-
+                    showAutoCloseDialog("Displaying all files in this Folder: " + csvResult, "Files in Folder", JOptionPane.INFORMATION_MESSAGE);
 
                     // THIS IS THE STRING THAT CONTAINS ONLY FILES THAT ARE REQUIRED
                     filtered_files = fileFilteration(csvResult);
@@ -379,19 +387,16 @@ class DirectoryParser {
 
 
 
-                    System.out.println("Required/Filtered files : " + filtered_files);
-
+                    showAutoCloseDialog("Required/Filtered files: " + filtered_files, "Filtered Files", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    System.out.println("Folder not found or no files in the folder.");
-                }
+                    showAutoCloseDialog("Folder not found or no files in the folder.", "Folder Not Found", JOptionPane.WARNING_MESSAGE);                }
             }
 
 
         }
 
         else {
-            System.out.println("Invalid directory path: " + rootPath);
-        }
+            showAutoCloseDialog("Invalid directory path: " + rootPath, "Invalid Directory", JOptionPane.ERROR_MESSAGE);        }
 
 
         for(int i =0; i< arraylist_filtered_Files.size(); i++){
@@ -435,9 +440,8 @@ class DirectoryParser {
 
 
 
-            System.out.println("File 1 :"+ getFilesInFolder(rootPath,first_file_name));
-            System.out.println("File 2 :"+ getFilesInFolder(rootPath,second_file_name));
-
+            showAutoCloseDialog("File 1: " + getFilesInFolder(rootPath, first_file_name), "File 1", JOptionPane.INFORMATION_MESSAGE);
+            showAutoCloseDialog("File 2: " + getFilesInFolder(rootPath, second_file_name), "File 2", JOptionPane.INFORMATION_MESSAGE);
         }
 
 

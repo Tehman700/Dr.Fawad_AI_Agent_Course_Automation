@@ -7,14 +7,15 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
-
+import javax.swing.*;
 import java.io.*;
 
 
 // Created on 28-01-2025 at 6:10 AM by Tehman
 public class MarkdownToPdfConverter {
-
+    AutoShowingDialog obb =new AutoShowingDialog();
     public void changerss(){
+        Main tt = new Main();
         String markdownFilePath = "Analysis Report.md";
         String pdfOutput = "final_PDF_Report.pdf";
 
@@ -25,8 +26,8 @@ public class MarkdownToPdfConverter {
 
 
             createPDFfromHTML(html_converter,pdfOutput);
+            obb.showAutoCloseDialog("PDF FILE CREATED SUCCESSFULLY!!!" + pdfOutput,"Final Step Completed",JOptionPane.INFORMATION_MESSAGE);
 
-            System.out.println("PDF FILE CREATED SUCCESSFULLY!!!" + pdfOutput);
 
         }catch(IOException | DocumentException e){
             e.printStackTrace();
@@ -56,8 +57,8 @@ public class MarkdownToPdfConverter {
         return renderer.render(document);
     }
 
-    public void createPDFfromHTML(String html, String pdfOutput) throws IOException, DocumentException{
-        Document docs= new Document(PageSize.A4);
+    public void createPDFfromHTML(String html, String pdfOutput) throws IOException, DocumentException {
+        Document docs = new Document(PageSize.A4);
         PdfWriter.getInstance(docs, new FileOutputStream(pdfOutput));
         docs.open();
 
@@ -69,11 +70,6 @@ public class MarkdownToPdfConverter {
 
         docs.close();
     }
-
-
-
-
-
 }
 
 
